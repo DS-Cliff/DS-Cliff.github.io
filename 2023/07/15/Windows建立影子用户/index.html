@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Windows建立影子用户, Web安全,信息安全,渗透测试,红蓝对抗,内网安全,linux,python等">
-    <meta name="description" content="">
+    <meta name="description" content="前言我们在管理员权限下可以使用net user [username$] [password] /add命令来创建或者删除隐藏用户，因此我们可以利用此方法建立隐藏用户来实现权限维持。但是通过这种方式建立的隐藏用户虽然能逃过net user的检">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -38,9 +38,7 @@
 
 
 
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
     <link rel="stylesheet" href="/css/post.css">
-
 
 
 
@@ -264,24 +262,39 @@
 
 
 
-<main class="post-container content">
+<main class="container content">
 
     
-    <div class="row">
-    <div id="main-content" class="col s12 m12 l9">
-        <!-- 文章内容详情 -->
+    <!-- 文章内容详情 -->
 <div id="artDetail">
     <div class="card">
         <div class="card-content article-info">
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Windows%E5%90%8E%E9%97%A8/">
+                                <span class="chip bg-color">Windows后门</span>
+                            </a>
+                        
+                            <a href="/tags/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/">
+                                <span class="chip bg-color">权限维持</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" class="post-category">
+                                权限维持
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -304,14 +317,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    0
+                    555
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    2 分
                 </div>
                 
 
@@ -331,7 +344,47 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我们在管理员权限下可以使用<code>net user [username$] [password] /add</code>命令来创建或者删除隐藏用户，因此我们可以利用此方法建立隐藏用户来实现权限维持。但是通过这种方式建立的隐藏用户虽然能逃过<code>net user</code>的检查，在本地用户和组中暴露无遗。为了更好的建立隐藏用户，我们需要修改注册表相关内容。</p>
+<h1 id="创建过程"><a href="#创建过程" class="headerlink" title="创建过程"></a>创建过程</h1><h2 id="1-创建常规隐藏用户并提升权限"><a href="#1-创建常规隐藏用户并提升权限" class="headerlink" title="1.创建常规隐藏用户并提升权限"></a>1.创建常规隐藏用户并提升权限</h2><p>创建隐藏用户<code>test$</code>，并将密码设置为123</p>
+<pre class=" language-powershell"><code class="language-powershell">net user test$ 123 <span class="token operator">/</span>add
+</code></pre>
+<p>将test$用户加入高权限的管理员组</p>
+<pre class=" language-powershell"><code class="language-powershell">net localgroup administrators test$ <span class="token operator">/</span>add
+</code></pre>
+<p>将test$用户退出低权限的用户组</p>
+<pre class=" language-powershell"><code class="language-powershell">net localgroup users test$ <span class="token operator">/</span><span class="token function">del</span>
+</code></pre>
+<p><img src="/../images/Windows%E5%BB%BA%E7%AB%8B%E5%BD%B1%E5%AD%90%E7%94%A8%E6%88%B7/1.png"></p>
+<p><img src="/../images/Windows%E5%BB%BA%E7%AB%8B%E5%BD%B1%E5%AD%90%E7%94%A8%E6%88%B7/2.png"></p>
+<p>很清楚地看见<code>net user</code>无法检测我们刚刚生成的隐藏用户，但是本地用户和组中能看见</p>
+<h2 id="2-修改注册表"><a href="#2-修改注册表" class="headerlink" title="2.修改注册表"></a>2.修改注册表</h2><h3 id="修改注册表SAM的权限"><a href="#修改注册表SAM的权限" class="headerlink" title="修改注册表SAM的权限"></a>修改注册表SAM的权限</h3><p>将<code>SAM</code>的<code>Administrators</code>组权限设置为完全控制，重新打开注册表（或者按F5刷新）即可看见<code>SAM</code>下面的项</p>
+<p><img src="/../images/Windows%E5%BB%BA%E7%AB%8B%E5%BD%B1%E5%AD%90%E7%94%A8%E6%88%B7/3.png"></p>
+<h3 id="替换隐藏用户属性为管理员"><a href="#替换隐藏用户属性为管理员" class="headerlink" title="替换隐藏用户属性为管理员"></a>替换隐藏用户属性为管理员</h3><p>首先在<code>Names</code>项中将事先添加的隐藏用户<code>test$</code>导出保存为<code>1.reg</code></p>
+<p><img src="/../images/Windows%E5%BB%BA%E7%AB%8B%E5%BD%B1%E5%AD%90%E7%94%A8%E6%88%B7/4.png"></p>
+<p>再通过<code>Names</code>项中用户的值去将<code>Users</code>项中<code>test$</code>和管理员用户<code>Administrator</code>注册表进行导出（比如<code>test$</code>的值为<code>0x3ec</code>，我们将<code>USers</code>项中的<code>000003EC</code>导出）</p>
+<p><img src="/../images/Windows%E5%BB%BA%E7%AB%8B%E5%BD%B1%E5%AD%90%E7%94%A8%E6%88%B7/5.png"></p>
+<p>将<code>000003EC</code>保存为<code>2.reg</code></p>
+<p><img src="/../images/Windows%E5%BB%BA%E7%AB%8B%E5%BD%B1%E5%AD%90%E7%94%A8%E6%88%B7/6.png"></p>
+<p>将<code>Administrator</code>对应的<code>000001F4</code>保存为<code>admin.reg</code></p>
+<p><img src="/../images/Windows%E5%BB%BA%E7%AB%8B%E5%BD%B1%E5%AD%90%E7%94%A8%E6%88%B7/7.png"></p>
+<p>将<code>2.reg</code>中<code>F</code>的值替换为<code>admin.reg</code>中<code>F</code>的值（将黄色部分替换为红色部分）</p>
+<p><img src="/../images/Windows%E5%BB%BA%E7%AB%8B%E5%BD%B1%E5%AD%90%E7%94%A8%E6%88%B7/8.png"></p>
+<h3 id="删除隐藏用户，导入隐藏用户注册表"><a href="#删除隐藏用户，导入隐藏用户注册表" class="headerlink" title="删除隐藏用户，导入隐藏用户注册表"></a>删除隐藏用户，导入隐藏用户注册表</h3><p>将隐藏用户删除</p>
+<pre class=" language-powershell"><code class="language-powershell">net user test$ <span class="token operator">/</span><span class="token function">del</span>
+</code></pre>
+<p>将<code>1.reg</code>和<code>2.reg</code>导入注册表（双击即可）</p>
+<p>此时我们查看本地用户和组并未发现<code>test$</code>账户，但使用<code>net user test$</code>可以查看到说明我们影子用户添加完成</p>
+<p><img src="/../images/Windows%E5%BB%BA%E7%AB%8B%E5%BD%B1%E5%AD%90%E7%94%A8%E6%88%B7/9.png"></p>
+<p>此时我们就实现权限维持，后续可以利用远程登录登入受害者主机</p>
+<h1 id="排查方法"><a href="#排查方法" class="headerlink" title="排查方法"></a>排查方法</h1><p>利用<code>vmic</code>命令即可查到所有用户</p>
+<pre class=" language-powershell"><code class="language-powershell">wmic useraccount get name<span class="token punctuation">,</span>sid
+</code></pre>
+<p><img src="/../images/Windows%E5%BB%BA%E7%AB%8B%E5%BD%B1%E5%AD%90%E7%94%A8%E6%88%B7/10.png"></p>
+<p>排查到以后可以将影子用户删除或者改密</p>
+<pre class=" language-powershell"><code class="language-powershell">net user test$ <span class="token operator">/</span><span class="token function">del</span>
+net user test$ <span class="token punctuation">[</span>密码<span class="token punctuation">]</span>
+</code></pre>
+
                 
             </div>
             <hr/>
@@ -394,7 +447,15 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/Windows%E5%90%8E%E9%97%A8/">
+                                    <span class="chip bg-color">Windows后门</span>
+                                </a>
+                            
+                                <a href="/tags/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/">
+                                    <span class="chip bg-color">权限维持</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -731,13 +792,29 @@
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Cliff
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" class="post-category">
+                                    权限维持
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Windows%E5%90%8E%E9%97%A8/">
+                        <span class="chip bg-color">Windows后门</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/">
+                        <span class="chip bg-color">权限维持</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -769,13 +846,29 @@
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Cliff
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" class="post-category">
+                                    权限维持
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Windows%E5%90%8E%E9%97%A8/">
+                        <span class="chip bg-color">Windows后门</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/">
+                        <span class="chip bg-color">权限维持</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -844,87 +937,6 @@
 <script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
 
 
-
-    </div>
-    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
-        <div class="toc-widget card" style="background-color: white;">
-            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
-            <div id="toc-content"></div>
-        </div>
-    </div>
-</div>
-
-<!-- TOC 悬浮按钮. -->
-
-<div id="floating-toc-btn" class="hide-on-med-and-down">
-    <a class="btn-floating btn-large bg-color">
-        <i class="fas fa-list-ul"></i>
-    </a>
-</div>
-
-
-<script src="/libs/tocbot/tocbot.min.js"></script>
-<script>
-    $(function () {
-        tocbot.init({
-            tocSelector: '#toc-content',
-            contentSelector: '#articleContent',
-            headingsOffset: -($(window).height() * 0.4 - 45),
-            collapseDepth: Number('0'),
-            headingSelector: 'h2, h3, h4'
-        });
-
-        // Set scroll toc fixed.
-        let tocHeight = parseInt($(window).height() * 0.4 - 64);
-        let $tocWidget = $('.toc-widget');
-        $(window).scroll(function () {
-            let scroll = $(window).scrollTop();
-            /* add post toc fixed. */
-            if (scroll > tocHeight) {
-                $tocWidget.addClass('toc-fixed');
-            } else {
-                $tocWidget.removeClass('toc-fixed');
-            }
-        });
-
-        
-        /* 修复文章卡片 div 的宽度. */
-        let fixPostCardWidth = function (srcId, targetId) {
-            let srcDiv = $('#' + srcId);
-            if (srcDiv.length === 0) {
-                return;
-            }
-
-            let w = srcDiv.width();
-            if (w >= 450) {
-                w = w + 21;
-            } else if (w >= 350 && w < 450) {
-                w = w + 18;
-            } else if (w >= 300 && w < 350) {
-                w = w + 16;
-            } else {
-                w = w + 14;
-            }
-            $('#' + targetId).width(w);
-        };
-
-        // 切换TOC目录展开收缩的相关操作.
-        const expandedClass = 'expanded';
-        let $tocAside = $('#toc-aside');
-        let $mainContent = $('#main-content');
-        $('#floating-toc-btn .btn-floating').click(function () {
-            if ($tocAside.hasClass(expandedClass)) {
-                $tocAside.removeClass(expandedClass).hide();
-                $mainContent.removeClass('l9');
-            } else {
-                $tocAside.addClass(expandedClass).show();
-                $mainContent.addClass('l9');
-            }
-            fixPostCardWidth('artDetail', 'prenext-posts');
-        });
-        
-    });
-</script>
 
     
 
@@ -1004,7 +1016,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">0</span>
+                        class="white-color">555</span>
             
             
             
