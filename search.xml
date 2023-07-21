@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>中间件漏洞Tomcat篇(1)</title>
+      <link href="/2023/07/21/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/"/>
+      <url>/2023/07/21/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/</url>
+      
+        <content type="html"><![CDATA[<h2 id="1-Tomcat-远程代码执行漏洞（CVE-2017-12615）"><a href="#1-Tomcat-远程代码执行漏洞（CVE-2017-12615）" class="headerlink" title="1.Tomcat 远程代码执行漏洞（CVE-2017-12615）"></a>1.Tomcat 远程代码执行漏洞（CVE-2017-12615）</h2><h3 id="漏洞描述"><a href="#漏洞描述" class="headerlink" title="漏洞描述"></a>漏洞描述</h3><p>当 Tomcat运行在Windows操作系统时，且启用了HTTP PUT请求方法（例如，将 readonly 初始化参数由默认值设置为 false），攻击者可能通过精心构造的攻击请求数据包向服务器上传包含任意代码的 JSP 文件，JSP文件中的恶意代码将能被服务器执行。漏洞的产生是由于配置不当（非默认配置），将配置文件（conf/web.xml）中的 readonly 设置为了 false ，导致可以使用PUT方法上传任意文件 ，虽然限制了jsp后缀，不过对于不同平台有多种绕过方法 。</p><h3 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h3><p>当在Tomcat的conf/web.xml配置文件中添加readonly设置为false时，将导致该漏洞产生。构造PUT请求包绕过对于jsp后缀的限制即可上传木马。</p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/1.png"></p><p><strong>绕过jsp限制方式</strong></p><pre class=" language-sh"><code class="language-sh">PUT /shell.jsp/#加/PUT /shell.jsp%20#加%20PUT /shell.jsp::$DATA#加::$DATA</code></pre><h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p> Apache Tomcat 7.0.0 - 7.0.79  </p><h3 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>抓包修改请求并上传马子</p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/2.png"></p><p>利用shell工具进行连接</p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/3.png"></p><p>成功上传木马，getshell</p><h3 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h3><p>将readonly的值设置为true</p><h2 id="2-弱口令爆破-上传war包"><a href="#2-弱口令爆破-上传war包" class="headerlink" title="2.弱口令爆破&amp;上传war包"></a>2.弱口令爆破&amp;上传war包</h2><h3 id="漏洞描述-1"><a href="#漏洞描述-1" class="headerlink" title="漏洞描述"></a>漏洞描述</h3><p>Tomcat有一个管理后台，其用户名和密码在Tomcat安装目录下的conf/tomcat-users.xml文件中配置，不少管理员为了方便，经常采用弱口令。 Tomcat 支持在后台部署war包，可以直接将webshell部署到web目录下，如果tomcat后台管理用户存在弱口令，这很容易被利用上传webshell。</p><h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>1.抓包获取Tomcat控制台的账户密码形式。在Authorization报文段中存放着认证数据，且经过Base64加密，我们将其解密发现认证数据传输方式为<code>账户:密码</code></p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/4.png"></p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/5.png"></p><p>2.利用burp的Intruder模块进行爆破。选择自定义迭代器，将形式设置为<code>账户:密码</code>，并最后进行Base64编码（不要勾选url-encode）</p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/6.png"></p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/7.png"></p><p>3.将爆破成功的结果进行Base64解码即可获得最终账户密码</p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/8.png"></p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/9.png"></p><p>最终的账户为tomcat，密码也为tomcat</p><p>4.登陆后台，上传war包</p><p><strong>制作war包</strong></p><p>①将冰蝎的jsp马子压缩成shell.zip</p><p>②再将shell.zip改名为shell.war</p><pre class=" language-shell"><code class="language-shell">注意：上传的war包会创建一个文件名目录，并在该目录下解压比如上传shell.war，tomcat会在webapps目录下创建一个shell目录，并在其中解压shell.war，也就是说shell.jsp的路径为：../shell/shell.jsp</code></pre><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/10.png"></p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/11.png"></p><h3 id="修复-1"><a href="#修复-1" class="headerlink" title="修复"></a>修复</h3><p>1.将弱口令改为强口令（conf/tomcat-users.xml）</p><p>2.删除manager文件</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 中间件漏洞 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Tomcat漏洞 </tag>
+            
+            <tag> 中间件漏洞 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Windows应急响应</title>
       <link href="/2023/07/19/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/"/>
       <url>/2023/07/19/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/</url>
@@ -20,9 +47,9 @@
       
         <tags>
             
-            <tag> 蓝队 </tag>
-            
             <tag> Windows应急响应 </tag>
+            
+            <tag> 蓝队 </tag>
             
         </tags>
       
@@ -47,9 +74,9 @@
       
         <tags>
             
-            <tag> Linux应急响应 </tag>
-            
             <tag> 蓝队 </tag>
+            
+            <tag> Linux应急响应 </tag>
             
         </tags>
       
