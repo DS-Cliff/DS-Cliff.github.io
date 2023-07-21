@@ -4,15 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Linux应急响应, Web安全,信息安全,渗透测试,红蓝对抗,内网安全,linux,python等">
-    <meta name="description" content="1.排查开机启动项相关文件及目录文件
-/etc/rc.local
-/etc/rc.d/rc.local
-文件夹
-/etc/rc.d/init.d                #该目录存放了可执行的脚本或文件
-/etc/rc*.d
-
-相关指">
+    <meta name="keywords" content="中间件漏洞Tomcat篇(2), Web安全,信息安全,渗透测试,红蓝对抗,内网安全,linux,python等">
+    <meta name="description" content="3.远程代码执行（CVE-2019-0232）漏洞描述Apache Tomcat是美国阿帕奇（Apache）软件基金会的一款轻量级Web应用服务器。该程序实现了对 Servlet和JavaServer Page（JSP）的支持。 4月11日">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -24,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Linux应急响应 | Cliff&#39;s blog</title>
+    <title>中间件漏洞Tomcat篇(2) | Cliff&#39;s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -45,7 +38,9 @@
 
 
 
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
     <link rel="stylesheet" href="/css/post.css">
+
 
 
 
@@ -254,12 +249,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Linux应急响应</h1>
+                    <h1 class="description center-align post-title">中间件漏洞Tomcat篇(2)</h1>
                 </div>
             </div>
         </div>
@@ -269,10 +264,12 @@
 
 
 
-<main class="container content">
+<main class="post-container content">
 
     
-    <!-- 文章内容详情 -->
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
 <div id="artDetail">
     <div class="card">
         <div class="card-content article-info">
@@ -281,12 +278,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Linux%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">
-                                <span class="chip bg-color">Linux应急响应</span>
+                            <a href="/tags/Tomcat%E6%BC%8F%E6%B4%9E/">
+                                <span class="chip bg-color">Tomcat漏洞</span>
                             </a>
                         
-                            <a href="/tags/%E8%93%9D%E9%98%9F/">
-                                <span class="chip bg-color">蓝队</span>
+                            <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/">
+                                <span class="chip bg-color">中间件漏洞</span>
                             </a>
                         
                     </div>
@@ -297,8 +294,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" class="post-category">
-                                应急响应
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/" class="post-category">
+                                中间件漏洞
                             </a>
                         
                     </div>
@@ -310,28 +307,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-07-19
+                    2023-07-21
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-07-19
+                    2023-07-21
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    503
+                    823
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    3 分
                 </div>
                 
 
@@ -351,118 +348,61 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="1-排查开机启动项"><a href="#1-排查开机启动项" class="headerlink" title="1.排查开机启动项"></a>1.排查开机启动项</h1><h2 id="相关文件及目录"><a href="#相关文件及目录" class="headerlink" title="相关文件及目录"></a>相关文件及目录</h2><pre class=" language-sh"><code class="language-sh">文件
-/etc/rc.local
-/etc/rc.d/rc.local
-文件夹
-/etc/rc.d/init.d                #该目录存放了可执行的脚本或文件
-/etc/rc*.d
+                <h2 id="3-远程代码执行（CVE-2019-0232）"><a href="#3-远程代码执行（CVE-2019-0232）" class="headerlink" title="3.远程代码执行（CVE-2019-0232）"></a>3.远程代码执行（CVE-2019-0232）</h2><h3 id="漏洞描述"><a href="#漏洞描述" class="headerlink" title="漏洞描述"></a>漏洞描述</h3><p>Apache Tomcat是美国阿帕奇（Apache）软件基金会的一款轻量级Web应用服务器。该程序实现了对 Servlet和JavaServer Page（JSP）的支持。 4月11日，Apache官方发布通告称将在最新版本中修复一个远程代码执行漏洞（CVE-2019-0232），由 于JRE将命令行参数传递给Windows的方式存在错误，会导致CGI Servlet受到远程执行代码的攻击。 </p>
+<pre class=" language-shell"><code class="language-shell">触发该漏洞需要同时满足以下条件： 
+1. 系统为Windows 
+2. 启用了CGI Servlet（默认为关闭） 
+3. 启用了enableCmdLineArguments（Tomcat 9.0.*及官方未来发布版本默认为关闭）
 </code></pre>
-<h2 id="相关指令"><a href="#相关指令" class="headerlink" title="相关指令"></a>相关指令</h2><p>查看开机启动服务</p>
-<pre class=" language-sh"><code class="language-sh">systemctl list-unit-files | grep enable
+<h3 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h3><p>漏洞相关的代码在 <code>tomcat\java\org\apache\catalina\servlets\CGIServlet.java</code> 中，<code>CGIServlet</code>提供了一个<code>cgi</code>的调用接口，在启用 <code>enableCmdLineArguments</code> 参数时，会根据<code>RFC 3875</code>来从Url参数中生成命令行参数，并把参数传递至Java的<code>Runtime</code>执行。这个漏洞是因为<code>Runtime.getRuntime().exec</code>在Windows中和Linux中底层实现不同导致的。</p>
+<p>Java的 <code>Runtime.getRuntime().exec</code> 在<code>CGI</code>调用这种情况下很难有命令注入。而Windows中创建进程使用的是 <code>CreateProcess</code> ，会将参数合并成字符串，作为 <code>lpComandLine</code> 传入 <code>CreateProcess</code> 。程序启动后调用 <code>GetCommandLine</code> 获取参数，并调用 <code>CommandLineToArgvW</code> 传至 argv。在Windows中，当 <code>CreateProcess</code> 中的参数为 bat 文件或是 cmd 文件时，会调用 <code>cmd.exe</code> , 故最后会变成 <code>cmd.exe /c "arg.bat &amp; dir"</code>，而Java的调用过程并没有做任何的转义，所以在Windows下会存在漏洞。</p>
+<h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><pre class=" language-shell"><code class="language-shell">Apache Tomcat 9.0.0.M1 to 9.0.17
+Apache Tomcat 8.5.0 to 8.5.39
+Apache Tomcat 7.0.0 to 7.0.93
 </code></pre>
-<p>关闭恶意服务</p>
-<pre class=" language-sh"><code class="language-sh">sudo systemctl stop [恶意服务]
+<h3 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>Tomcat的CGI_Servlet组件默认是关闭的，在 conf/web.xml 中找到注释的CGIServlet部分，去掉注释， 并配置enableCmdLineArguments和executable</p>
+<p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/1.png"></p>
+<p> 然后在<code>conf/web.xml</code>中启用<code>cgi</code>的 <code>servlet-mapping</code>（去掉注释）</p>
+<p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/2.png"></p>
+<p>修改<code>conf/context.xml</code>，添加 <code>privileged="true"</code>属性，否则会没有权限</p>
+<p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/3.png"></p>
+<p>在<code>webapps\ROOT\WEB-INF</code>下创建<code>cgi-bin</code>目录，并在该目录下创建一个test.bat，test.bat中写入如下内容，重启tomcat。</p>
+<pre class=" language-bash"><code class="language-bash">@echo off
+<span class="token keyword">echo</span> Content-Type: text/plain
+echo.
+<span class="token keyword">set</span> off<span class="token operator">=</span>%~1
+%off%
 </code></pre>
-<p>删除恶意服务开机启动</p>
-<pre class=" language-sh"><code class="language-sh">sudo systemctl disable [恶意服务]
+<p>接着访问<code>http://192.168.3.208:8080/cgi-bin/test.bat?&amp;C%3A%5CWindows%5CSystem32%5Cnet%20user</code>即可执行<code>net user</code>命令</p>
+<p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/4.png"></p>
+<p>我们也可以访问<code>http://192.168.3.208:8080/cgi-bin/test.bat?&amp;C%3A%5CWindows%5CSystem32%5Csysteminfo</code>执行<code>systeminfo</code>命令，只要修改后面参数即可进行任意命令执行</p>
+<p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/5.png"></p>
+<h3 id="漏洞修复"><a href="#漏洞修复" class="headerlink" title="漏洞修复"></a>漏洞修复</h3><p>及时进行版本更新</p>
+<h2 id="4-Apache-Tomcat文件包含漏洞（CVE-2020-1938）"><a href="#4-Apache-Tomcat文件包含漏洞（CVE-2020-1938）" class="headerlink" title="4.Apache Tomcat文件包含漏洞（CVE-2020-1938）"></a>4.Apache Tomcat文件包含漏洞（CVE-2020-1938）</h2><h3 id="漏洞描述-1"><a href="#漏洞描述-1" class="headerlink" title="漏洞描述"></a>漏洞描述</h3><p>Tomcat默认开启的AJP服务（8009端口）存在一处文件包含缺陷，攻击者可构造恶意的请求包进行文件包含操作，进而读取受影响Tomcat服务器上的Web目录文件。通常用java开发的应用程序的war包也是放在webapp目录下的，所以也能够被攻击者读取到。这也意味着，如果你把数据库用户名密码、连接其他后端服务的账号、JWT签名secret、OAuth AppSecret等密钥信息放在properties文件里的话，那么，攻击者可能现在也拿到了这些信息，并且正在试着入侵你的服务器。</p>
+<h3 id="影响版本-1"><a href="#影响版本-1" class="headerlink" title="影响版本"></a>影响版本</h3><pre class=" language-sh"><code class="language-sh">Apache Tomcat 6
+Tomcat 7系列 <7.0.100
+Tomcat 8系列 < 8.5.51
+Tomcat 9 系列 <9.0.31
 </code></pre>
-<p>关闭错误时还原服务设置</p>
-<pre class=" language-sh"><code class="language-sh">sudo systemctl start [客户服务]
-sudo systemctl enable [客户服务]
+<h3 id="漏洞原理-1"><a href="#漏洞原理-1" class="headerlink" title="漏洞原理"></a>漏洞原理</h3><p>tomcat默认的<code>conf/server.xml</code>中配置了2个Connector，一个为8080的对外提供的HTTP协议端口，另 外一个就是默认的8009AJP协议端口，两个端口默认均监听在外网ip。tomcat在接收AJP请求的时候调用<code>org.apache.coyote.ajp.AjpProcessor</code>来处理AJP消息， prepareRequest将AJP里面的内容取出来设置成request对象的Attribute属性。可以通过此种特性从而 可以控制request对象的下面三个Attribute属性</p>
+<pre class=" language-sh"><code class="language-sh">javax.servlet.include.request_uri
+javax.servlet.include.path_info
+javax.servlet.include.servlet_path
 </code></pre>
-<hr>
-<h1 id="2-排查系统配置文件"><a href="#2-排查系统配置文件" class="headerlink" title="2.排查系统配置文件"></a>2.排查系统配置文件</h1><h2 id="环境变量配置文件"><a href="#环境变量配置文件" class="headerlink" title="环境变量配置文件"></a>环境变量配置文件</h2><ul>
-<li><p>/etc/profile</p>
-</li>
-<li><p>/etc/bashrc</p>
-</li>
-<li><p>/etc/bash.bashrc</p>
-</li>
-<li><p>~/.bashrc</p>
-</li>
-<li><p>~/.profile</p>
-</li>
-<li><p>~/.bash_profile</p>
-</li>
-<li><p>~/.bash_logout</p>
-<p><img src="/../images/Linux%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/1.png"></p>
-<p>登录和切换用户时都会加载这些环境变量文件，而在系统登出时则会加载~/.bash_logout/</p>
-</li>
-</ul>
-<hr>
-<h1 id="3-排查资源异常以及进程"><a href="#3-排查资源异常以及进程" class="headerlink" title="3.排查资源异常以及进程"></a>3.排查资源异常以及进程</h1><h2 id="查看所有进程"><a href="#查看所有进程" class="headerlink" title="查看所有进程"></a>查看所有进程</h2><pre class=" language-sh"><code class="language-sh">sudo ps -aux
+<p>再通过控制AJP控制的上述三个属性来读取文件，通过操控上述三个属性从而可以读取到应用目录下的任何文件。</p>
+<h3 id="漏洞复现-1"><a href="#漏洞复现-1" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>1.利用nmap进行扫描探测是否开启AJP服务的8009端口</p>
+<p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/6.png"></p>
+<p>2.利用POC直接验证</p>
+<p>工具地址：<a target="_blank" rel="noopener" href="https://github.com/YDHCUI/CNVD-2020-10487-Tomcat-Ajp-lfi">https://github.com/YDHCUI/CNVD-2020-10487-Tomcat-Ajp-lfi</a></p>
+<pre class=" language-shell"><code class="language-shell">使用命令：python2 CNVD-2020-10487-Tomcat-Ajp-lfi.py [IP] -p 8009 -f WEB-INF/web.xml
 </code></pre>
-<h2 id="查找进程文件位置"><a href="#查找进程文件位置" class="headerlink" title="查找进程文件位置"></a>查找进程文件位置</h2><pre class=" language-sh"><code class="language-sh">sudo lsof -p [PID]                #查看该pid对应进程的详细信息
-sudo ls -al /proc/pid/exe         #查看该pid对应进程的绝对路径
-sudo kill -9 [PID]                #杀掉进程
+<p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/7.png"></p>
+<p>成功读取到web.xml文件</p>
+<h3 id="漏洞修复-1"><a href="#漏洞修复-1" class="headerlink" title="漏洞修复"></a>漏洞修复</h3><p>1.更新到安全版本</p>
+<p>2.关闭AJP服务，修改Tomcat配置文件Service.xml,注释掉</p>
+<pre class=" language-shell"><code class="language-shell"><Connector port="8009" protocol="AJP/1.3" redirectPort="8443" />
 </code></pre>
-<table>
-<thead>
-<tr>
-<th align="left">文件</th>
-<th align="left">作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">cwd</td>
-<td align="left">符号链接的是进程运行目录</td>
-</tr>
-<tr>
-<td align="left">exe</td>
-<td align="left">符号链接的是执行程序的绝对路径</td>
-</tr>
-<tr>
-<td align="left">cmdline</td>
-<td align="left">符号链接的是进程运行目录</td>
-</tr>
-<tr>
-<td align="left">environ</td>
-<td align="left">记录进程运行时系统的环境变量</td>
-</tr>
-</tbody></table>
-<h2 id="查看CPU占用"><a href="#查看CPU占用" class="headerlink" title="查看CPU占用"></a>查看CPU占用</h2><pre class=" language-sh"><code class="language-sh">top
-</code></pre>
-<h2 id="查看内存"><a href="#查看内存" class="headerlink" title="查看内存"></a>查看内存</h2><pre class=" language-sh"><code class="language-sh">ps -aux | sort -k4nr | head -10
-</code></pre>
-<hr>
-<h1 id="4-网络排查"><a href="#4-网络排查" class="headerlink" title="4.网络排查"></a>4.网络排查</h1><h2 id="网卡实时流量排查"><a href="#网卡实时流量排查" class="headerlink" title="网卡实时流量排查"></a>网卡实时流量排查</h2><pre class=" language-sh"><code class="language-sh">sudo iftop -i [网卡] -P
-</code></pre>
-<h2 id="网络连接排查"><a href="#网络连接排查" class="headerlink" title="网络连接排查"></a>网络连接排查</h2><pre class=" language-sh"><code class="language-sh">netstat -antup
-</code></pre>
-<ul>
-<li>-a 显示所有</li>
-<li>-n 数字形式展示连接端口</li>
-<li>-t 查看tcp连接</li>
-<li>-u 查看udp连接</li>
-<li>-p 显示相关程序名<br>着重查看ESTABLISHED的端口</li>
-</ul>
-<hr>
-<h1 id="5-定时任务排查"><a href="#5-定时任务排查" class="headerlink" title="5.定时任务排查"></a>5.定时任务排查</h1><h2 id="定时任务文件或目录"><a href="#定时任务文件或目录" class="headerlink" title="定时任务文件或目录"></a>定时任务文件或目录</h2><ul>
-<li>/var/spool/cron                                                          </li>
-<li>/etc/crontab                                                            </li>
-<li>/etc/cron.d</li>
-<li>/etc/cron.hourly</li>
-<li>/etc/cron.daily</li>
-<li>/etc/cron.weekly</li>
-<li>/etc/cron.monthly</li>
-</ul>
-<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><pre class=" language-sh"><code class="language-sh">crontab -l                             #查看所有crontab计划任务
-</code></pre>
-<hr>
-<h1 id="6-用户筛查"><a href="#6-用户筛查" class="headerlink" title="6.用户筛查"></a>6.用户筛查</h1><p>检查用户的uid和gid，如果为0着重注意</p>
-<pre class=" language-sh"><code class="language-sh">/etc/passwd
-</code></pre>
-<p>查看登录用户的时间、ip</p>
-<pre class=" language-sh"><code class="language-sh">who
-</code></pre>
-<hr>
-<h1 id="7-Rootkit排查"><a href="#7-Rootkit排查" class="headerlink" title="7.Rootkit排查"></a>7.Rootkit排查</h1><h2 id="chkrootkit"><a href="#chkrootkit" class="headerlink" title="chkrootkit"></a>chkrootkit</h2><pre class=" language-sh"><code class="language-sh">sudo apt install chkrootkit
-sudo chkrootkit
-</code></pre>
-<h2 id="rkhunter"><a href="#rkhunter" class="headerlink" title="rkhunter"></a>rkhunter</h2><pre class=" language-sh"><code class="language-sh">sudo apt install rkhunter
-sudo rkhunter --check
-</code></pre>
+<p>3.配置AJP配置中的secretRequired跟secret属性来限制认证</p>
 
                 
             </div>
@@ -489,7 +429,7 @@ sudo rkhunter --check
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://DS-Cliff.github.io/2023/07/19/Linux%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">https://DS-Cliff.github.io/2023/07/19/Linux%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/</a>
+                    <a href="https://DS-Cliff.github.io/2023/07/21/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/">https://DS-Cliff.github.io/2023/07/21/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -527,12 +467,12 @@ sudo rkhunter --check
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Linux%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">
-                                    <span class="chip bg-color">Linux应急响应</span>
+                                <a href="/tags/Tomcat%E6%BC%8F%E6%B4%9E/">
+                                    <span class="chip bg-color">Tomcat漏洞</span>
                                 </a>
                             
-                                <a href="/tags/%E8%93%9D%E9%98%9F/">
-                                    <span class="chip bg-color">蓝队</span>
+                                <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/">
+                                    <span class="chip bg-color">中间件漏洞</span>
                                 </a>
                             
                         </div>
@@ -845,17 +785,18 @@ sudo rkhunter --check
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2023/07/19/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">
+                <a href="/2023/07/21/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Windows应急响应">
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="中间件漏洞Tomcat篇(2)">
                         
-                        <span class="card-title">Windows应急响应</span>
+                        <span class="card-title">中间件漏洞Tomcat篇(2)</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -865,30 +806,31 @@ sudo rkhunter --check
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-07-19
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-21
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" class="post-category">
-                                    应急响应
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/" class="post-category">
+                                    中间件漏洞
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%93%9D%E9%98%9F/">
-                        <span class="chip bg-color">蓝队</span>
+                    <a href="/tags/Tomcat%E6%BC%8F%E6%B4%9E/">
+                        <span class="chip bg-color">Tomcat漏洞</span>
                     </a>
                     
-                    <a href="/tags/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">
-                        <span class="chip bg-color">Windows应急响应</span>
+                    <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/">
+                        <span class="chip bg-color">中间件漏洞</span>
                     </a>
                     
                 </div>
@@ -902,13 +844,13 @@ sudo rkhunter --check
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/07/15/Windows%E5%BB%BA%E7%AB%8B%E5%BD%B1%E5%AD%90%E7%94%A8%E6%88%B7/">
+                <a href="/2023/07/21/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="Windows建立影子用户">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="中间件漏洞Tomcat篇(1)">
                         
-                        <span class="card-title">Windows建立影子用户</span>
+                        <span class="card-title">中间件漏洞Tomcat篇(1)</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -919,14 +861,14 @@ sudo rkhunter --check
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-15
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-21
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" class="post-category">
-                                    权限维持
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/" class="post-category">
+                                    中间件漏洞
                                 </a>
                             
                             
@@ -936,12 +878,12 @@ sudo rkhunter --check
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Windows%E5%90%8E%E9%97%A8/">
-                        <span class="chip bg-color">Windows后门</span>
+                    <a href="/tags/Tomcat%E6%BC%8F%E6%B4%9E/">
+                        <span class="chip bg-color">Tomcat漏洞</span>
                     </a>
                     
-                    <a href="/tags/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/">
-                        <span class="chip bg-color">权限维持</span>
+                    <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/">
+                        <span class="chip bg-color">中间件漏洞</span>
                     </a>
                     
                 </div>
@@ -1013,6 +955,87 @@ sudo rkhunter --check
 <script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
 
 
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
 
     
 

