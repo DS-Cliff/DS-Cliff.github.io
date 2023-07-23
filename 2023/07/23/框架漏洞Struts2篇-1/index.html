@@ -4,11 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Windows应急响应, Web安全,信息安全,渗透测试,红蓝对抗,内网安全,linux,python等">
-    <meta name="description" content="1.用户排查查看本地用户和组win + r 输入 lusrmgr.msc 查看本地用户和组中是否有可疑用户
-
-查看注册表win + r 输入 regedit
-HKLM\SAM\SAM\Domains\Account\Users\Names ">
+    <meta name="keywords" content="框架漏洞Struts2篇(1), Web安全,信息安全,渗透测试,红蓝对抗,内网安全,linux,python等">
+    <meta name="description" content="Struts2框架介绍Struts是Apache软件基金会（ASF）赞助的一个开源项目。它最初是Jakarta项目中的一个子项目，并在2004年3月成为ASF的顶级项目。它通过采用Java Servlet/JSP技术，实现了基于Java E">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -20,7 +17,7 @@ HKLM\SAM\SAM\Domains\Account\Users\Names ">
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Windows应急响应 | Cliff&#39;s blog</title>
+    <title>框架漏洞Struts2篇(1) | Cliff&#39;s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -41,7 +38,9 @@ HKLM\SAM\SAM\Domains\Account\Users\Names ">
 
 
 
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
     <link rel="stylesheet" href="/css/post.css">
+
 
 
 
@@ -250,12 +249,12 @@ HKLM\SAM\SAM\Domains\Account\Users\Names ">
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Windows应急响应</h1>
+                    <h1 class="description center-align post-title">框架漏洞Struts2篇(1)</h1>
                 </div>
             </div>
         </div>
@@ -265,10 +264,12 @@ HKLM\SAM\SAM\Domains\Account\Users\Names ">
 
 
 
-<main class="container content">
+<main class="post-container content">
 
     
-    <!-- 文章内容详情 -->
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
 <div id="artDetail">
     <div class="card">
         <div class="card-content article-info">
@@ -277,12 +278,12 @@ HKLM\SAM\SAM\Domains\Account\Users\Names ">
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E8%93%9D%E9%98%9F/">
-                                <span class="chip bg-color">蓝队</span>
+                            <a href="/tags/%E6%A1%86%E6%9E%B6%E6%BC%8F%E6%B4%9E/">
+                                <span class="chip bg-color">框架漏洞</span>
                             </a>
                         
-                            <a href="/tags/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">
-                                <span class="chip bg-color">Windows应急响应</span>
+                            <a href="/tags/Struts%E6%BC%8F%E6%B4%9E/">
+                                <span class="chip bg-color">Struts漏洞</span>
                             </a>
                         
                     </div>
@@ -293,8 +294,8 @@ HKLM\SAM\SAM\Domains\Account\Users\Names ">
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" class="post-category">
-                                应急响应
+                            <a href="/categories/%E6%A1%86%E6%9E%B6%E6%BC%8F%E6%B4%9E/" class="post-category">
+                                框架漏洞
                             </a>
                         
                     </div>
@@ -306,28 +307,28 @@ HKLM\SAM\SAM\Domains\Account\Users\Names ">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-07-19
+                    2023-07-23
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-07-19
+                    2023-07-23
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    551
+                    512
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    1 分
                 </div>
                 
 
@@ -347,60 +348,17 @@ HKLM\SAM\SAM\Domains\Account\Users\Names ">
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="1-用户排查"><a href="#1-用户排查" class="headerlink" title="1.用户排查"></a>1.用户排查</h1><h2 id="查看本地用户和组"><a href="#查看本地用户和组" class="headerlink" title="查看本地用户和组"></a>查看本地用户和组</h2><pre class=" language-sh"><code class="language-sh">win + r 输入 lusrmgr.msc 查看本地用户和组中是否有可疑用户
-</code></pre>
-<h2 id="查看注册表"><a href="#查看注册表" class="headerlink" title="查看注册表"></a>查看注册表</h2><pre class=" language-sh"><code class="language-sh">win + r 输入 regedit
-HKLM\SAM\SAM\Domains\Account\Users\Names 查看是否有可疑用户
-ps:记得赋予Administrator对应SAM的完全控制
-</code></pre>
-<p><img src="/../images/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/1.png"></p>
-<h2 id="利用Wmic命令"><a href="#利用Wmic命令" class="headerlink" title="利用Wmic命令"></a>利用Wmic命令</h2><pre class=" language-sh"><code class="language-sh">在cmd中输入：wmic useraccount get name,sid
-</code></pre>
-<p><img src="/../images/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/2.png"><br>特别关注带有$的隐藏用户</p>
-<hr>
-<h1 id="2-启动项排查"><a href="#2-启动项排查" class="headerlink" title="2. 启动项排查"></a>2. 启动项排查</h1><h2 id="启动菜单查看"><a href="#启动菜单查看" class="headerlink" title="启动菜单查看"></a>启动菜单查看</h2><pre class=" language-sh"><code class="language-sh">C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
-</code></pre>
-<h2 id="系统配置msconfig"><a href="#系统配置msconfig" class="headerlink" title="系统配置msconfig"></a>系统配置msconfig</h2><pre class=" language-sh"><code class="language-sh">win + r 输入 msconfig ---> 点击启动 查看可疑启动项
-</code></pre>
-<h2 id="注册表"><a href="#注册表" class="headerlink" title="注册表"></a>注册表</h2><pre class=" language-sh"><code class="language-sh">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
-HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
-HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
-</code></pre>
-<h1 id="3-计划任务排查"><a href="#3-计划任务排查" class="headerlink" title="3. 计划任务排查"></a>3. 计划任务排查</h1><h2 id="利用计算机管理"><a href="#利用计算机管理" class="headerlink" title="利用计算机管理"></a>利用计算机管理</h2><pre class=" language-sh"><code class="language-sh">win + r 输入 compmgmt.msc ---> 任务计划程序 ---> 任务计划程序库 查找可疑计划任务
-</code></pre>
-<p><img src="/../images/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/3.png"></p>
-<h2 id="命令行查看计划任务"><a href="#命令行查看计划任务" class="headerlink" title="命令行查看计划任务"></a>命令行查看计划任务</h2><pre class=" language-sh"><code class="language-sh">cmd 中 输入：schtasks
-</code></pre>
-<h1 id="4-服务自启动排查"><a href="#4-服务自启动排查" class="headerlink" title="4. 服务自启动排查"></a>4. 服务自启动排查</h1><pre class=" language-sh"><code class="language-sh">win + r 输入 services.msc    注意服务状态和启动类型，检查是否有异常服务
-</code></pre>
-<h1 id="5-临时目录排查"><a href="#5-临时目录排查" class="headerlink" title="5. 临时目录排查"></a>5. 临时目录排查</h1><pre class=" language-sh"><code class="language-sh">C:\Windows\Temp
-%Temp%
-在目录中发现可疑的pe文件即可丢入查杀平台进行验证，若是木马文件即需要即使取样并清除
-</code></pre>
-<h1 id="6-最近操作排查"><a href="#6-最近操作排查" class="headerlink" title="6. 最近操作排查"></a>6. 最近操作排查</h1><pre class=" language-sh"><code class="language-sh">win + r 输入 recent
-时间排序，查看是否有可疑⽂件
-</code></pre>
-<h1 id="7-进程排查"><a href="#7-进程排查" class="headerlink" title="7. 进程排查"></a>7. 进程排查</h1><h2 id="查看可疑网络连接"><a href="#查看可疑网络连接" class="headerlink" title="查看可疑网络连接"></a>查看可疑网络连接</h2><pre class=" language-sh"><code class="language-sh">netstat -ano | findstr "ESTABLISHED"
-</code></pre>
-<h2 id="根据可疑连接pid定位"><a href="#根据可疑连接pid定位" class="headerlink" title="根据可疑连接pid定位"></a>根据可疑连接pid定位</h2><pre class=" language-sh"><code class="language-sh">tasklist | findstr "pid"
-</code></pre>
-<h2 id="杀掉进程"><a href="#杀掉进程" class="headerlink" title="杀掉进程"></a>杀掉进程</h2><pre class=" language-sh"><code class="language-sh">taskkill /F /T /PID [pid]
-/F：强制终止
-/T：终止该进程以及其子进程
-/PID：后接进程pid值
-</code></pre>
-<h2 id="利用msinfo32排查进程"><a href="#利用msinfo32排查进程" class="headerlink" title="利用msinfo32排查进程"></a>利用msinfo32排查进程</h2><pre class=" language-sh"><code class="language-sh">win + r 输入 msinfo32 ---> 软件环境 ---> 正在运行任务 即可查看正在运行进程详细信息
-</code></pre>
-<p><img src="/../images/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/4.png"></p>
-<h1 id="8-补丁排查"><a href="#8-补丁排查" class="headerlink" title="8. 补丁排查"></a>8. 补丁排查</h1><pre class=" language-sh"><code class="language-sh">systeminfo 查看主机补丁情况，将其复制到在线Windows提权网站即可看到缺失补丁信息
-</code></pre>
-<h1 id="9-日志排查"><a href="#9-日志排查" class="headerlink" title="9. 日志排查"></a>9. 日志排查</h1><h2 id="查看日志"><a href="#查看日志" class="headerlink" title="查看日志"></a>查看日志</h2><pre class=" language-sh"><code class="language-sh">win + r 输入 eventvwr.msc 打开事件检查器
-日志路径：C:\Windows\System32\winevt\Logs
-</code></pre>
-<h2 id="重点排查事件"><a href="#重点排查事件" class="headerlink" title="重点排查事件"></a>重点排查事件</h2><pre class=" language-sh"><code class="language-sh">4624（登陆成功）4625（登陆失败）
-关注调用进程名，登录源ip，登录源端口，登陆用户名和登陆失败信息等
-4720（创建用户）4726（删除用户）
+                <h2 id="Struts2框架介绍"><a href="#Struts2框架介绍" class="headerlink" title="Struts2框架介绍"></a>Struts2框架介绍</h2><p>Struts是Apache软件基金会（ASF）赞助的一个开源项目。它最初是Jakarta项目中的一个子项目，并在2004年3月成为ASF的顶级项目。它通过采用Java Servlet/JSP技术，实现了基于Java EE Web应用的Model-View-Controller（MVC）设计模式的应用框架，是MVC经典设计模式中的一个经典产品。在过去多年的时间中，Struts2曾被爆出过许多安全漏洞，业内对其命名也从S2-001命名到了S2-061,也就是说前前后后一共产生了61个安全漏洞，其中的两个大类是DDOS漏洞个RCE漏洞，而本次我们复现、共享的漏洞主要是最近几年的RCE漏洞。</p>
+<h3 id="struts2框架判断"><a href="#struts2框架判断" class="headerlink" title="struts2框架判断"></a>struts2框架判断</h3><p>看url里面的连接，如果是XXX.action结尾或直接XXX.do结尾的，就是struts框架写的。如果URL连接的文件没有后缀，则可能是struts2框架写的，看HTMl源码中加载/提交的文件后缀可判断。还是不行，就可以通过传入大量错误数据，使其报错，看报错内容来判断。</p>
+<h2 id="struts2漏洞-S2-001"><a href="#struts2漏洞-S2-001" class="headerlink" title="struts2漏洞 S2-001"></a>struts2漏洞 S2-001</h2><h3 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h3><p>该漏洞因用户提交表单数据并且验证失败时，后端会将用户之前提交的参数值使用OGNL表达式%{value}进行解析，然后重新填充到对应的表单数据中。如注册或登录页面，提交失败后一般会默认返回之前提交的数据，由于后端使用%{value}对提交的数据执行了一次OGNL 表达式解析(即进行java代码解析)，所以可以直接构造 Payload进行命令执行。</p>
+<h3 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>在页面url中发现login.action，确认是struts2框架</p>
+<p><img src="/../images/%E6%A1%86%E6%9E%B6%E6%BC%8F%E6%B4%9EStruts2%E7%AF%87-1/1.png"></p>
+<p><strong>验证使用%{}提交数据是否进行OGNL表达式解析（即漏洞是否存在）</strong></p>
+<p><img src="/../images/%E6%A1%86%E6%9E%B6%E6%BC%8F%E6%B4%9EStruts2%E7%AF%87-1/2.png"></p>
+<p><img src="/../images/%E6%A1%86%E6%9E%B6%E6%BC%8F%E6%B4%9EStruts2%E7%AF%87-1/3.png"></p>
+<p>我们可以清晰的看见返回结果成功进行了<code>1+2</code>运算，也就是说进行了解析，漏洞存在</p>
+<p><strong>获取Web路径</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token operator">%</span>
 </code></pre>
 
                 
@@ -428,7 +386,7 @@ HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://DS-Cliff.github.io/2023/07/19/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">https://DS-Cliff.github.io/2023/07/19/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/</a>
+                    <a href="https://DS-Cliff.github.io/2023/07/23/%E6%A1%86%E6%9E%B6%E6%BC%8F%E6%B4%9EStruts2%E7%AF%87-1/">https://DS-Cliff.github.io/2023/07/23/%E6%A1%86%E6%9E%B6%E6%BC%8F%E6%B4%9EStruts2%E7%AF%87-1/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -466,12 +424,12 @@ HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E8%93%9D%E9%98%9F/">
-                                    <span class="chip bg-color">蓝队</span>
+                                <a href="/tags/%E6%A1%86%E6%9E%B6%E6%BC%8F%E6%B4%9E/">
+                                    <span class="chip bg-color">框架漏洞</span>
                                 </a>
                             
-                                <a href="/tags/Windows%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">
-                                    <span class="chip bg-color">Windows应急响应</span>
+                                <a href="/tags/Struts%E6%BC%8F%E6%B4%9E/">
+                                    <span class="chip bg-color">Struts漏洞</span>
                                 </a>
                             
                         </div>
@@ -784,17 +742,18 @@ HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2023/07/21/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9ETomcat%E7%AF%87-1/">
+                <a href="/2023/07/23/%E6%A1%86%E6%9E%B6%E6%BC%8F%E6%B4%9EStruts2%E7%AF%87-1/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="中间件漏洞Tomcat篇(1)">
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="框架漏洞Struts2篇(1)">
                         
-                        <span class="card-title">中间件漏洞Tomcat篇(1)</span>
+                        <span class="card-title">框架漏洞Struts2篇(1)</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -804,30 +763,31 @@ HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-07-21
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-23
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/" class="post-category">
-                                    中间件漏洞
+                            <a href="/categories/%E6%A1%86%E6%9E%B6%E6%BC%8F%E6%B4%9E/" class="post-category">
+                                    框架漏洞
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/">
-                        <span class="chip bg-color">中间件漏洞</span>
+                    <a href="/tags/%E6%A1%86%E6%9E%B6%E6%BC%8F%E6%B4%9E/">
+                        <span class="chip bg-color">框架漏洞</span>
                     </a>
                     
-                    <a href="/tags/Tomcat%E6%BC%8F%E6%B4%9E/">
-                        <span class="chip bg-color">Tomcat漏洞</span>
+                    <a href="/tags/Struts%E6%BC%8F%E6%B4%9E/">
+                        <span class="chip bg-color">Struts漏洞</span>
                     </a>
                     
                 </div>
@@ -841,13 +801,13 @@ HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/07/19/Linux%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">
+                <a href="/2023/07/22/%E8%AF%BB%E3%80%8A%E8%AE%A4%E7%9F%A5%E8%A7%89%E9%86%92%E3%80%8B%E5%B0%8F%E8%AE%B0-1/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Linux应急响应">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="读《认知觉醒》小记">
                         
-                        <span class="card-title">Linux应急响应</span>
+                        <span class="card-title">读《认知觉醒》小记</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -858,14 +818,14 @@ HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-19
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-22
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" class="post-category">
-                                    应急响应
+                            <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="post-category">
+                                    读书笔记
                                 </a>
                             
                             
@@ -875,12 +835,12 @@ HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Linux%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">
-                        <span class="chip bg-color">Linux应急响应</span>
+                    <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">
+                        <span class="chip bg-color">读书笔记</span>
                     </a>
                     
-                    <a href="/tags/%E8%93%9D%E9%98%9F/">
-                        <span class="chip bg-color">蓝队</span>
+                    <a href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/">
+                        <span class="chip bg-color">方法论</span>
                     </a>
                     
                 </div>
@@ -952,6 +912,87 @@ HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
 <script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
 
 
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
 
     
 
